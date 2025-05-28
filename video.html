@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Video & Audio Playback</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding-top: 40px;
+    background: #f0f0f0;
+  }
+  video {
+    width: 80%;
+    max-width: 640px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.3);
+  }
+</style>
+</head>
+<body>
+
+<video id="myVideo" muted loop playsinline>
+  <source src="yogii.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
+<audio id="myAudio" src="mr bean tamil song.mp3" loop></audio>
+
+<script>
+  const video = document.getElementById('myVideo');
+  const audio = document.getElementById('myAudio');
+
+  function rampVolume(duration = 3000, steps = 30) {
+    const intervalTime = duration / steps;
+    let step = 0;
+    audio.volume = 0;
+
+    const interval = setInterval(() => {
+      step++;
+      audio.volume = Math.min(step / steps, 1);
+      if (step >= steps) clearInterval(interval);
+    }, intervalTime);
+  }
+
+  window.addEventListener('load', () => {
+    if(localStorage.getItem('autoVolumePermission') === 'granted') {
+      video.play().catch(() => {});
+      audio.volume = 0;
+      audio.play()
+        .then(() => rampVolume())
+        .catch(e => {
+          console.error('Audio play failed:', e);
+          alert('Audio playback failed: ' + e.message);
+        });
+    } else {
+      alert("Please go back and click Start button to allow playback.");
+    }
+  });
+</script>
+
+</body>
+</html>

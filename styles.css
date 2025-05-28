@@ -1,0 +1,30 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding-top: 80px;
+  background: #f0f0f0;
+}
+
+#startBtn {
+  padding: 20px 50px;
+  font-size: 24px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#startBtn:hover {
+  background: #218838;
+}
+
+#myVideo {
+  display: none;
+  width: 80%;
+  max-width: 640px;
+  margin-top: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.3);
+}

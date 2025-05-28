@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Fullscreen Video + Auto Volume</title>
+<style>
+  /* Center start button full screen */
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #222;
+    overflow: hidden;
+  }
+  #startBtn {
+    padding: 20px 50px;
+    font-size: 24px;
+    border: none;
+    border-radius: 10px;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+    z-index: 10;
+  }
+  #startBtn:hover {
+    background-color: #218838;
+  }
+  /* Fullscreen video hidden initially */
+  #myVideo {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    object-fit: cover;
+    display: none;
+    z-index: 1;
+    background: black;
+  }
+</style>
+</head>
+<body>
+
+<button id="startBtn">Start & Allow Auto Volume</button>
+
+<video id="myVideo" muted loop playsinline>
+  <source src="yogii.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
+<audio id="myAudio" src="mr bean tamil song.mp3" loop></audio>
+
+<script>
+  const startBtn = document.getElementById('startBtn');
+  const video = document.getElementById('myVideo');
+  const audio = document.getElementById('myAudio');
+
+  function rampVolume(duration = 3000, steps = 30) {
+    let step = 0;
+    const intervalTime = duration / steps;
+    audio.volume = 0;
+    const interval = setInterval(() => {
+      step++;
+      audio.volume = Math.min(step / steps, 1);
+      if (step >= steps) clearInterval(interval);
+    }, intervalTime);
+  }
+
+  startBtn.addEventListener('click', () => {
+    startBtn.style.display = 'none';
+    video.style.display = 'block';
+
+    video.play().catch(() => {
+      console.warn('Video play failed');
+    });
+
+    audio.volume = 0;
+    audio.play()
+      .then(() => {
+        rampVolume();
+      })
+      .catch(err => {
+        alert('Audio play failed. Please interact again.');
+        console.error(err);
+        startBtn.style.display = 'block';
+        video.style.display = 'none';
+      });
+  });
+</script>
+
+</body>
+</html>
